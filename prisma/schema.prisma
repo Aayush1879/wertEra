@@ -1,0 +1,133 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum OrderStatus {
+  fulfilled
+  shipped
+  awaiting_shipment
+}
+
+enum ShirtColor {
+  black
+  white
+  maroon
+  mint
+  mustard
+  olive
+  pista
+  purple
+  red 
+  royal_blue 
+  skyblue 
+  teal
+}
+
+enum ShirtSize{
+  xxs
+  xs 
+  s 
+  m 
+  l 
+  xl 
+  xxl 
+}
+
+enum ShirtSleeve {
+  half
+  full
+  dropShoulder
+  sleeveless
+  raglan
+}
+
+enum ShirtNeck {
+  round
+  v
+  polo
+}
+
+enum ShirtQuantity{
+  one
+  two
+  three 
+  four 
+  five 
+  six 
+  seven 
+  eight
+  nine 
+  ten
+}
+
+model Configuration {
+  id                  String        @id @default(cuid())
+  width               Int
+  height              Int
+  imageUrl            String
+  size                ShirtSize? 
+  sleeve              ShirtSleeve?
+  color               ShirtColor?
+  neck                ShirtNeck?
+  quantity            ShirtQuantity?
+  croppedImageUrl     String
+  Order           Order[]
+}
+
+model User {
+  id    String  @id @default(cuid())
+  email String
+  Order Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  configurationId String
+  configuration   Configuration @relation(fields: [configurationId], references: [id])
+  user            User          @relation(fields: [userId], references: [id])
+  userId          String
+  amount          Float
+  isPaid          Boolean       @default(false)
+  status          OrderStatus   @default(awaiting_shipment)
+  @@unique([userId, configurationId])
+  shippingAddress   ShippingAddress? @relation(fields: [shippingAddressId], references: [id])
+  shippingAddressId String?
+  billingAddress    BillingAddress?  @relation(fields: [billingAddressId], references: [id])
+  billingAddressId  String?
+  createdAt DateTime @default(now())
+  updated   DateTime @updatedAt
+}
+
+model ShippingAddress {
+  id          String  @id @default(cuid())
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  state       String?
+  phoneNumber String?
+  orders      Order[]
+}
+
+model BillingAddress {
+  id          String  @id @default(cuid())
+  name        String
+  street      String
+  city        String
+  postalCode  String
+  country     String
+  state       String?
+  phoneNumber String?
+  orders      Order[]
+}
