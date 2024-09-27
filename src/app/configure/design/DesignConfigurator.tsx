@@ -155,7 +155,7 @@ const DesignConfigurator = ({configId, imageUrl , imageDimensions}: DesignConfig
                         
                     </AspectRatio>
                     <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="relative z-50 w-[15.5rem] h-[17rem] ml-[15rem] aspect-square bg-transparent shadow-[0_0_0_99999px_rgba(229,231,235,0.1)]" />
+{/*                         <div className="relative z-50 w-[15.5rem] h-[17rem] ml-[15rem] aspect-square bg-transparent shadow-[0_0_0_99999px_rgba(229,231,235,0.1)]" /> */}
                         <div
                             ref={containerRef}
                             className={cn(
